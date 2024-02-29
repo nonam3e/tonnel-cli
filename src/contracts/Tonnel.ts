@@ -92,7 +92,7 @@ export class Tonnel implements Contract {
     recipient: Address;
     fee: bigint;
   }) {
-    return  beginCell()
+    return beginCell()
       .storeUint(Opcodes.withdraw, 32)
       .storeUint(opts.queryID ?? 0, 64)
       .storeRef(
@@ -124,11 +124,10 @@ export class Tonnel implements Contract {
       fee: bigint;
     },
   ) {
-    const inputCell = Tonnel.buildWithdrawCell(opts)
+    const inputCell = Tonnel.buildWithdrawCell(opts);
     const check = await this.getCheckVerify(provider, inputCell);
-    console.log(check);
     if (check !== 1) {
-      throw new Error(`Withdraw check failed: ${check}`);
+      throw new Error(`Withdraw check failed`);
     }
     await provider.internal(via, {
       value: opts.value,
@@ -165,6 +164,4 @@ export class Tonnel implements Contract {
     const result = await provider.getState();
     return result.balance;
   }
-  
-
 }

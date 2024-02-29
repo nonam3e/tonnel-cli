@@ -41,7 +41,7 @@ export class TonnelJetton implements Contract {
     recipient: Address;
     fee: bigint;
   }) {
-    return  beginCell()
+    return beginCell()
       .storeUint(Opcodes.withdraw, 32)
       .storeUint(opts.queryID ?? 0, 64)
       .storeRef(
@@ -73,10 +73,15 @@ export class TonnelJetton implements Contract {
       fee: bigint;
     },
   ) {
+    const inputCell = TonnelJetton.buildWithdrawCell(opts);
+    const check = await this.getCheckVerify(provider, inputCell);
+    if (check !== 1) {
+      throw new Error(`Withdraw check failed`);
+    }
     await provider.internal(via, {
       value: opts.value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: TonnelJetton.buildWithdrawCell(opts)
+      body: inputCell,
     });
   }
   async getLastRoot(provider: ContractProvider) {

@@ -2,7 +2,14 @@ import path from "path";
 import fs from "fs/promises";
 import { Storage } from "./Storage";
 
-type StorageElement = string | number | boolean | string[] | number[] | boolean[] | null
+type StorageElement =
+  | string
+  | number
+  | boolean
+  | string[]
+  | number[]
+  | boolean[]
+  | null;
 
 type StorageObject = {
   [k: string]: StorageElement;
@@ -36,12 +43,12 @@ export class FSStorage implements Storage {
 
   async getItem(key: string): Promise<string | null> {
     const obj = await this.#readObject();
-    return obj[key] as string ?? null;
+    return (obj[key] as string) ?? null;
   }
 
   async getArray(key: string): Promise<string[] | null> {
     const obj = await this.#readObject();
-    return obj[key] as string[] ?? null
+    return (obj[key] as string[]) ?? null;
   }
 
   async removeItem(key: string): Promise<void> {

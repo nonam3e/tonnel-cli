@@ -29,5 +29,4 @@ export const withdraw: Runner = async (args: Args, ui: UIProvider) => {
   }
 
   await runner(args, ui, {});
-
 };

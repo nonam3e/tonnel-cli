@@ -6,7 +6,7 @@ export const TEMP = "temp";
 export const WRAPPERS_DIR = path.join(process.cwd(), WRAPPERS);
 export const TEMP_DIR = path.join(process.cwd(), TEMP);
 
-export const CACHE_DIR = path.join(process.cwd(), TEMP, "cache")
+export const CACHE_DIR = path.join(process.cwd(), TEMP, "cache");
 
 export const wasmPath = path.join(__dirname, "../build/withdraw/circuit.wasm");
 export const zkeyPath = path.join(

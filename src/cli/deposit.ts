@@ -6,10 +6,7 @@ import chalk from "chalk";
 import { fromNano } from "@ton/core";
 import { PrivateKey, generatePrivateKey } from "../zk/depositHelpers";
 import { PoolProvider } from "../pools/Pool";
-import {
-  PoolConfig,
-  PoolTypes,
-} from "../pools/config";
+import { PoolConfig, PoolTypes } from "../pools/config";
 import { TonPools, TonnelPools } from "../pools/list";
 import { toPercentString } from "../utils";
 
@@ -87,8 +84,7 @@ export const deposit: Runner = async (args: Args, ui: UIProvider) => {
   }
   clearLastLine();
 
-  const localArgs = arg(argSpec);
-  const networkProvider = await createNetworkProvider(ui, localArgs);
+  const networkProvider = await createNetworkProvider(ui, args);
   const pool = new PoolProvider(networkProvider.api(), poolConfig);
   await pool.pool.proofSendDeposit(networkProvider.sender(), privateKey);
 };

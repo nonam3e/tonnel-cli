@@ -6,7 +6,6 @@ import chalk from "chalk";
 import { InquirerUIProvider } from "../ui/InquirerUIProvider";
 import { startup } from "./startup";
 
-
 async function main() {
   require("ts-node/register");
   console.debug = function () {};
@@ -33,4 +32,3 @@ function showTitle() {
   console.log(orange(textSync("Tonnel", "ANSI Shadow")));
 }
 export { startup };
-

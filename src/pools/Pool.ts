@@ -17,7 +17,13 @@ import { JettonMaster, TonClient } from "@ton/ton";
 import chalk from "chalk";
 import { PrivateKey } from "../zk/depositHelpers";
 import { groth16, mimcHash2, parseG1Func, parseG2Func } from "../zk/circuit";
-import { CACHE_DIR, wasmPath, wasmPathInsert, zkeyPath, zkeyPathInsert } from "../paths";
+import {
+  CACHE_DIR,
+  wasmPath,
+  wasmPathInsert,
+  zkeyPath,
+  zkeyPathInsert,
+} from "../paths";
 import { Groth16Proof } from "snarkjs";
 import { JettonWallet } from "../contracts/JettonWallet";
 import { PoolConfig, PoolConfigNative, PoolConfigJetton } from "./config";
@@ -40,30 +46,37 @@ export interface WithdrawProof {
 }
 
 export abstract class Pool {
-  config: PoolConfig
+  config: PoolConfig;
   provider: TonClient;
   abstract tonnel: OpenedContract<Tonnel | TonnelJetton>;
   constructor(provider: TonClient, conf: PoolConfig) {
     this.provider = provider;
     this.config = conf;
   }
-  async getCache(): Promise<{to_lt?: string, leafs: string[]}> {
-    const storage = new FSStorage(path.join(CACHE_DIR, this.config.address.toString() + ".json"))
-    return {to_lt: (await storage.getItem("to_lt"))?? undefined, leafs: (await storage.getArray("leafs"))?? []}
+  async getCache(): Promise<{ to_lt?: string; leafs: string[] }> {
+    const storage = new FSStorage(
+      path.join(CACHE_DIR, this.config.address.toString() + ".json"),
+    );
+    return {
+      to_lt: (await storage.getItem("to_lt")) ?? undefined,
+      leafs: (await storage.getArray("leafs")) ?? [],
+    };
   }
   async setCache(to_lt: string | undefined, leafs: string[]) {
-    const storage = new FSStorage(path.join(CACHE_DIR, this.config.address.toString() + ".json"))
-    await storage.setItem("to_lt", to_lt ?? null)
-    await storage.setItem("leafs", leafs)
+    const storage = new FSStorage(
+      path.join(CACHE_DIR, this.config.address.toString() + ".json"),
+    );
+    await storage.setItem("to_lt", to_lt ?? null);
+    await storage.setItem("leafs", leafs);
   }
   async buildTree(): Promise<MerkleTree> {
-    let {to_lt, leafs} = await this.getCache();
+    let { to_lt, leafs } = await this.getCache();
     let transactions = await this.getAllTransactions(to_lt);
     if (transactions.length > 0) {
-      to_lt = transactions[0].lt.toString()
+      to_lt = transactions[0].lt.toString();
       leafs = leafs.concat(this.filterLeafs(transactions));
-      await this.setCache(to_lt, leafs)
-    } 
+      await this.setCache(to_lt, leafs);
+    }
     return new MerkleTree(20, leafs, {
       hashFunction: mimcHash2,
       zeroElement:
@@ -72,7 +85,6 @@ export abstract class Pool {
   }
   abstract balanceInfo(via: Sender): Promise<string>;
   abstract sendDeposit(via: Sender, opts: DepositProof): Promise<void>;
-  // abstract sendWithdraw(opts: WithdrawProof): Promise<void>;
   abstract filterLeafs(transactions: Transaction[]): string[];
   abstract isEnoughTokens(via: Sender): Promise<boolean>;
   async buildTreeWrapped() {
@@ -117,12 +129,31 @@ export abstract class Pool {
     );
     return proof;
   }
+  async sendWithdraw(via: Sender, opts: WithdrawProof): Promise<void> {
+    const B_x = opts.proof.pi_b[0].map((num: string) => BigInt(num));
+    const B_y = opts.proof.pi_b[1].map((num: string) => BigInt(num));
+
+    await this.tonnel.sendWithdraw(via, {
+      value: toNano("0.3".toString()),
+      root: opts.root,
+      nullifierHash: opts.nullifierHash,
+      recipient: opts.recipient,
+      fee: opts.fee,
+      a: parseG1Func(
+        opts.proof.pi_a.slice(0, 2).map((num: string) => BigInt(num)),
+      ),
+      b: parseG2Func(B_x[0], B_x[1], B_y),
+      c: parseG1Func(
+        opts.proof.pi_c.slice(0, 2).map((num: string) => BigInt(num)),
+      ),
+    });
+  }
   async proofSendDeposit(via: Sender, secretKey: PrivateKey) {
     console.log(await this.balanceInfo(via));
-    if (!(await this.isEnoughTokens(via))) {
-      console.log(chalk.red("Not enough tokens to continue"));
-      process.exit(0);
-    }
+    // if (!(await this.isEnoughTokens(via))) {
+    //   console.log(chalk.red("Not enough tokens to continue"));
+    //   process.exit(0);
+    // }
 
     await this.sendDeposit(
       via,
@@ -144,18 +175,18 @@ export abstract class Pool {
     const B_x = opts.proof.pi_b[0].map((num: string) => BigInt(num));
     const B_y = opts.proof.pi_b[1].map((num: string) => BigInt(num));
     return Tonnel.buildWithdrawCell({
-          root: opts.root,
-          nullifierHash: opts.nullifierHash,
-          recipient: opts.recipient,
-          fee: opts.fee,
-          a: parseG1Func(
-            opts.proof.pi_a.slice(0, 2).map((num: string) => BigInt(num)),
-          ),
-          b: parseG2Func(B_x[0], B_x[1], B_y),
-          c: parseG1Func(
-            opts.proof.pi_c.slice(0, 2).map((num: string) => BigInt(num)),
-          ),
-        })
+      root: opts.root,
+      nullifierHash: opts.nullifierHash,
+      recipient: opts.recipient,
+      fee: opts.fee,
+      a: parseG1Func(
+        opts.proof.pi_a.slice(0, 2).map((num: string) => BigInt(num)),
+      ),
+      b: parseG2Func(B_x[0], B_x[1], B_y),
+      c: parseG1Func(
+        opts.proof.pi_c.slice(0, 2).map((num: string) => BigInt(num)),
+      ),
+    });
   }
   async getAllTransactions(to_lt?: string) {
     const limit = 100;
@@ -164,7 +195,7 @@ export abstract class Pool {
       { limit, to_lt },
     );
     if (transactions.length == 0) {
-      return []
+      return [];
     }
     let last = transactions[transactions.length - 1].lt;
     let prev_length = transactions.length;
@@ -272,7 +303,8 @@ class TonPool extends Pool {
     let B_y = opts.proof.pi_b[1].map((num: string) => BigInt(num));
     await this.tonnel.sendDeposit(via, {
       value:
-        this.deposit_fee + (this.config.value * (1000n + BigInt(this.config.fee))) / 1000n,
+        this.deposit_fee +
+        (this.config.value * (1000n + BigInt(this.config.fee))) / 1000n,
       commitment: opts.commitment,
       newRoot: opts.newRoot,
       oldRoot: opts.oldRoot,
@@ -295,31 +327,13 @@ class TonPool extends Pool {
   async isEnoughTokens(via: Sender): Promise<boolean> {
     return (
       (await this.provider.getBalance(via.address!!)) >
-      this.deposit_fee + (this.config.value * (1000n + BigInt(this.config.fee))) / 1000n
+      this.deposit_fee +
+        (this.config.value * (1000n + BigInt(this.config.fee))) / 1000n
     );
   }
   async balanceInfo(via: Sender): Promise<string> {
     return `${fromNano(await this.provider.getBalance(via.address!!))} TON`;
   }
-  // async sendWithdraw(opts: WithdrawProof): Promise<void> {
-  //   const B_x = opts.proof.pi_b[0].map((num: string) => BigInt(num));
-  //   const B_y = opts.proof.pi_b[1].map((num: string) => BigInt(num));
-
-  //   await this.tonnel.sendWithdraw(this.provider.sender(), {
-  //     value: toNano("0.3".toString()),
-  //     root: opts.root,
-  //     nullifierHash: opts.nullifierHash,
-  //     recipient: opts.recipient,
-  //     fee: opts.fee,
-  //     a: parseG1Func(
-  //       opts.proof.pi_a.slice(0, 2).map((num: string) => BigInt(num)),
-  //     ),
-  //     b: parseG2Func(B_x[0], B_x[1], B_y),
-  //     c: parseG1Func(
-  //       opts.proof.pi_c.slice(0, 2).map((num: string) => BigInt(num)),
-  //     ),
-  //   });
-  // }
   filterLeafs(transactions: Transaction[]) {
     return transactions
       .filter((tr) => {
@@ -423,29 +437,11 @@ class JettonPool extends Pool {
       toAddress: this.tonnel.address,
       queryId: Date.now(),
       fwdAmount: this.deposit_fee,
-      jettonAmount: (this.config.value * (1000n + BigInt(this.config.fee))) / 1000n,
+      jettonAmount:
+        (this.config.value * (1000n + BigInt(this.config.fee))) / 1000n,
       fwdPayload,
     });
   }
-  // async sendWithdraw(opts: WithdrawProof): Promise<void> {
-  //   const B_x = opts.proof.pi_b[0].map((num: string) => BigInt(num));
-  //   const B_y = opts.proof.pi_b[1].map((num: string) => BigInt(num));
-
-  //   await this.tonnel.sendWithdraw(this.provider.sender(), {
-  //     value: toNano("0.3".toString()),
-  //     root: opts.root,
-  //     nullifierHash: opts.nullifierHash,
-  //     recipient: opts.recipient,
-  //     fee: opts.fee,
-  //     a: parseG1Func(
-  //       opts.proof.pi_a.slice(0, 2).map((num: string) => BigInt(num)),
-  //     ),
-  //     b: parseG2Func(B_x[0], B_x[1], B_y),
-  //     c: parseG1Func(
-  //       opts.proof.pi_c.slice(0, 2).map((num: string) => BigInt(num)),
-  //     ),
-  //   });
-  // }
   filterLeafs(transactions: Transaction[]) {
     return transactions
       .filter((tr) => {
