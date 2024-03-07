@@ -2,7 +2,6 @@
   "name": "tonnel-cli",
   "version": "0.1.0",
   "disableExperimentalSEAWarning": true,
-  "main": "./dist/index.js",
   "bin": {
     "tonnel-cli": "./dist/cli.js"
   },
