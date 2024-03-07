@@ -150,10 +150,10 @@ export abstract class Pool {
   }
   async proofSendDeposit(via: Sender, secretKey: PrivateKey) {
     console.log(await this.balanceInfo(via));
-    // if (!(await this.isEnoughTokens(via))) {
-    //   console.log(chalk.red("Not enough tokens to continue"));
-    //   process.exit(0);
-    // }
+    if (!(await this.isEnoughTokens(via))) {
+      console.log(chalk.red("Not enough tokens to continue"));
+      process.exit(0);
+    }
 
     await this.sendDeposit(
       via,
@@ -192,7 +192,7 @@ export abstract class Pool {
     const limit = 100;
     let transactions: Transaction[] = await this.provider.getTransactions(
       this.tonnel.address,
-      { limit, to_lt },
+      { limit, to_lt, inclusive: false },
     );
     if (transactions.length == 0) {
       return [];
