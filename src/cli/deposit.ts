@@ -7,7 +7,7 @@ import { fromNano } from "@ton/core";
 import { PrivateKey, generatePrivateKey } from "../zk/depositHelpers";
 import { PoolProvider } from "../pools/Pool";
 import { PoolConfig, PoolTypes } from "../pools/config";
-import { TonPools, TonnelPools } from "../pools/list";
+import { GramPools, TonPools, TonnelPools } from "../pools/list";
 import { toPercentString } from "../utils";
 
 export function chalkPoolTypes(type: PoolTypes) {
@@ -15,9 +15,9 @@ export function chalkPoolTypes(type: PoolTypes) {
     case PoolTypes.TON:
       return chalk.blueBright(type);
     case PoolTypes.TONNEL:
-      return chalk.cyanBright(type);
-    // case PoolTypes.DFC:
-    //     return chalk.magenta(type)
+      return chalk.hex("#ce7f33")(type);
+    case PoolTypes.GRAM:
+      return chalk.gray(type);
   }
 }
 
@@ -46,6 +46,10 @@ export async function choosePool(
       break;
     case PoolTypes.TONNEL:
       options = TonnelPools;
+      break;
+    case PoolTypes.GRAM:
+      options = GramPools;
+      break;
   }
   return await opts.ui.choose(
     opts.msg,

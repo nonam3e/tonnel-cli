@@ -22,5 +22,5 @@ export type PoolConfigJetton = {
 export enum PoolTypes {
   TON = "TON",
   TONNEL = "TONNEL",
-  // "DFC"
+  GRAM = "GRAM",
 }

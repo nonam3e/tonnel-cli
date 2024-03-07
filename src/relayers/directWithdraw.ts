@@ -1,7 +1,5 @@
 import { Args } from "../cli/Runner";
-import {
-  createNetworkProvider,
-} from "../network/createNetworkProvider";
+import { createNetworkProvider } from "../network/createNetworkProvider";
 import { PoolProvider } from "../pools/Pool";
 import { UIProvider } from "../ui/UIProvider";
 import { readPrivateKey } from "./utils";

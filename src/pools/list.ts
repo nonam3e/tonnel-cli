@@ -19,6 +19,13 @@ export const TonPools: PoolConfigNative[] = [
   {
     type: "native",
     coinType: PoolTypes.TON,
+    value: toNano(250),
+    fee: 5,
+    address: Address.parse("EQBYpQiQMwGBMzhOlJ52e4yXmcKCB_5uTTJ7bVSGqr-8YANi"),
+  },
+  {
+    type: "native",
+    coinType: PoolTypes.TON,
     value: toNano(1000),
     fee: 3,
     address: Address.parse("EQB-s4WzIgGP9U6DNlFH_kSn0JuxhBCBXr_rKz2ztEiozTto"),
@@ -49,5 +56,24 @@ export const TonnelPools: PoolConfigJetton[] = [
     fee: 5,
     address: Address.parse("EQAgoyECSzCIFTFkMIvDLgdUE3D9RxGfYQQGfxy3lBBc_Ke_"),
     jetton: Address.parse("EQDNDv54v_TEU5t26rFykylsdPQsv5nsSZaH_v7JSJPtMitv"),
+  },
+  {
+    type: "jetton",
+    coinType: PoolTypes.TONNEL,
+    value: toNano(10000),
+    fee: 2,
+    address: Address.parse("EQDTs-yjPLn7XzaRRq8pjp7H8Nw4y_OJ51Bk2dcrPlIYgwtV"),
+    jetton: Address.parse("EQDNDv54v_TEU5t26rFykylsdPQsv5nsSZaH_v7JSJPtMitv"),
+  },
+];
+
+export const GramPools: PoolConfigJetton[] = [
+  {
+    type: "jetton",
+    coinType: PoolTypes.GRAM,
+    value: toNano(500000),
+    fee: 6,
+    address: Address.parse("EQD7U_FPYRFTGgiqrpiKh8_giyrIQHZtokUKvz2EmWvlmViC"),
+    jetton: Address.parse("EQC47093oX5Xhb0xuk2lCr2RhS8rj-vul61u4W2UH5ORmG_O"),
   },
 ];

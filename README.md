@@ -12,6 +12,7 @@ This is a beta version, so exercise caution with every action you perform. Your 
 TonKeeper emulates the transaction flow before sending and highlights any potential problems, allowing you to review and approve transactions with confidence.
 
 **Please Note:**
+
 - **Secrets:** Ensure you save your secrets securely, as they are not currently stored.
 - **TonKeeper:** Consider using TonKeeper for sending transactions to simulate and review the transaction flow before approval.
 

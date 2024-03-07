@@ -4,7 +4,7 @@ import { withdrawTonnel } from "./tonnelRelayers";
 
 export const withdrawRunners: Record<string, Runner> = {
   withdrawTonnel,
-  withdrawDirect
+  withdrawDirect,
 };
 
 export const RelayerManagers: { name: string; value: string }[] = [
@@ -14,6 +14,6 @@ export const RelayerManagers: { name: string; value: string }[] = [
   },
   {
     name: "Direct",
-    value: "withdrawDirect"
-  }
+    value: "withdrawDirect",
+  },
 ];
