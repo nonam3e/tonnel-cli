@@ -16,3 +16,15 @@ TonKeeper emulates the transaction flow before sending and highlights any potent
 - **TonKeeper:** Consider using TonKeeper for sending transactions to simulate and review the transaction flow before approval.
 
 Your feedback is valuable in improving the stability and security of this beta version. Thank you for testing and helping us enhance TONNEL-CLI!
+
+# Installation
+
+```bash
+sudo npm install -g tonnel-cli@latest
+```
+
+# Usage
+
+```bash
+tonnel-cli
+```
