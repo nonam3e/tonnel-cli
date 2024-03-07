@@ -1,6 +1,10 @@
 {
   "name": "tonnel-cli",
-  "version": "0.1.1",
+  "version": "0.1.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nonam3e/tonnel-cli.git"
+  },
   "disableExperimentalSEAWarning": true,
   "bin": {
     "tonnel-cli": "./dist/cli.js"
