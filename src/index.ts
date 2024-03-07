@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 export { tonDeepLink, sleep } from "./utils";
 
 // export { NetworkProvider } from './network/NetworkProvider';

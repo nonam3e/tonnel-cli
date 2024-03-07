@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-import * as dotenv from "dotenv";
-dotenv.config();
 import { textSync } from "figlet";
 import chalk from "chalk";
 import { InquirerUIProvider } from "../ui/InquirerUIProvider";

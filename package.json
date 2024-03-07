@@ -1,16 +1,20 @@
 {
   "name": "tonnel-cli",
   "version": "0.1.0",
-  "main": "./dist/cli/cli.js",
-  "output": "./bin/blob.blob",
   "disableExperimentalSEAWarning": true,
-  "bin": "./dist/cli/cli.js",
+  "main": "./dist/index.js",
+  "bin": {
+    "tonnel-cli": "./dist/cli.js"
+  },
   "license": "MIT",
   "files": [
     "dist/**/*"
   ],
   "scripts": {
-    "build": "rm -rf dist && tsc && cp src/zk/mimcsponge.js dist/zk/ && chmod +x -R dist/"
+    "clean": "rimraf ./dist/",
+    "dev": "ts-node src/cli/cli.ts",
+    "bundle": "npm run clean && tsup",
+    "upload": "npm run bundle && npm publish"
   },
   "devDependencies": {
     "@ton/core": "^0.49.2",
@@ -23,6 +27,7 @@
     "@types/snarkjs": "^0.7.8",
     "circomlib": "^0.5.2",
     "ethers": "^5.0.26",
+    "pkg": "^4.4.0",
     "prettier": "^3.0.3",
     "snarkjs": "^0.4.4",
     "source-map-support": "^0.5.21",
@@ -47,6 +52,7 @@
     "kleur": "^4.1.5",
     "qrcode-terminal": "^0.12.0",
     "ton-x": "^2.1.0",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "tsup": "^8.0.2"
   }
 }
