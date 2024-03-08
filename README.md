@@ -20,12 +20,14 @@ Your feedback is valuable in improving the stability and security of this beta v
 
 # Installation
 
+Currently npm package doesn't work properly, so run it from sources
+
 ```bash
-sudo npm install -g tonnel-cli@latest
+git clone https://github.com/nonam3e/tonnel-cli && cd tonnel-cli && yarn install
 ```
 
-# Usage
+## Usage
 
 ```bash
-tonnel-cli
+yarn dev
 ```
