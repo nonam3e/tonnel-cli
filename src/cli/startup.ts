@@ -39,35 +39,33 @@ export const MainMenuTemplate: { name: string; value: string }[] = [
 ];
 
 export async function startup(ui: UIProvider) {
-  while (true) {
-    const args = arg(argSpec, {
-      permissive: true,
-    });
+  const args = arg(argSpec, {
+    permissive: true,
+  });
 
-    if (args._.length === 0) {
-      args._.push(
-        (
-          await selectOption(MainMenuTemplate, {
-            ui,
-            msg: "What do you want to do?",
-          })
-        ).value,
-      );
-    }
-
-    let effectiveRunners: Record<string, Runner> = {};
-
-    effectiveRunners = {
-      ...effectiveRunners,
-      ...runners,
-    };
-
-    const runner = effectiveRunners[args._[0]];
-    if (!runner) {
-      console.log(chalk.redBright(` Error: command not found.`));
-      process.exit(1);
-    }
-
-    await runner(args, ui, {});
+  if (args._.length === 0) {
+    args._.push(
+      (
+        await selectOption(MainMenuTemplate, {
+          ui,
+          msg: "What do you want to do?",
+        })
+      ).value,
+    );
   }
+
+  let effectiveRunners: Record<string, Runner> = {};
+
+  effectiveRunners = {
+    ...effectiveRunners,
+    ...runners,
+  };
+
+  const runner = effectiveRunners[args._[0]];
+  if (!runner) {
+    console.log(chalk.redBright(` Error: command not found.`));
+    process.exit(1);
+  }
+
+  await runner(args, ui, {});
 }

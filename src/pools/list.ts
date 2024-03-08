@@ -71,6 +71,14 @@ export const GramPools: PoolConfigJetton[] = [
   {
     type: "jetton",
     coinType: PoolTypes.GRAM,
+    value: toNano(30000),
+    fee: 8,
+    address: Address.parse("EQCZXyOWRih3jtyhdCA7DV7KXluNbzqeIpJPnRkF4KEE1STp"),
+    jetton: Address.parse("EQC47093oX5Xhb0xuk2lCr2RhS8rj-vul61u4W2UH5ORmG_O"),
+  },
+  {
+    type: "jetton",
+    coinType: PoolTypes.GRAM,
     value: toNano(500000),
     fee: 6,
     address: Address.parse("EQD7U_FPYRFTGgiqrpiKh8_giyrIQHZtokUKvz2EmWvlmViC"),

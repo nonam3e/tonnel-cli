@@ -1,6 +1,6 @@
 import { toNano } from "@ton/core";
 import { PoolConfig, PoolTypes } from "../pools/config";
-import { TonPools, TonnelPools } from "../pools/list";
+import { GramPools, TonPools, TonnelPools } from "../pools/list";
 import { PrivateKey } from "../zk/depositHelpers";
 import { UIProvider } from "../ui/UIProvider";
 
@@ -19,6 +19,9 @@ export async function readPrivateKey(ui: UIProvider) {
       poolConfig = TonnelPools.find(
         (pool) => pool.value == toNano(secret[1]),
       )!!;
+      break;
+    case PoolTypes.GRAM:
+      poolConfig = GramPools.find((pool) => pool.value == toNano(secret[1]))!!;
       break;
     default:
       throw new Error("Unknown pool");

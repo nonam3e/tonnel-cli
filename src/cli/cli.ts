@@ -29,4 +29,3 @@ function showTitle() {
   const orange = chalk.hex("#ce7f33");
   console.log(orange(textSync("Tonnel", "ANSI Shadow")));
 }
-export { startup };

@@ -7,15 +7,8 @@ import {
   DictionaryValue,
   Sender,
   SendMode,
-  storeTransaction,
-  Transaction,
-  TransactionComputeVm,
-  TransactionDescriptionGeneric,
 } from "@ton/core";
 import { TupleItemSlice } from "@ton/core/dist/tuple/tuple";
-import { TonClient } from "@ton/ton";
-import { MerkleTree } from "fixed-merkle-tree";
-import { mimcHash2 } from "../zk/circuit";
 
 export const Opcodes = {
   deposit: 0x888,

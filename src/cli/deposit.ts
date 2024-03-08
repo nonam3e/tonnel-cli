@@ -1,4 +1,3 @@
-import arg from "arg";
 import { createNetworkProvider } from "../network/createNetworkProvider";
 import { UIProvider } from "../ui/UIProvider";
 import { Args, Runner, argSpec } from "./Runner";

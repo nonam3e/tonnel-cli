@@ -9,9 +9,7 @@ import {
 } from "../network/createNetworkProvider";
 import { PoolProvider } from "../pools/Pool";
 import { toPercentString } from "../utils";
-import { PoolConfig, PoolTypes } from "../pools/config";
-import { TonPools, TonnelPools } from "../pools/list";
-import axios, { AxiosHeaders } from "axios";
+import axios from "axios";
 import { mimcHash2 } from "../zk/circuit";
 import { readPrivateKey } from "./utils";
 
