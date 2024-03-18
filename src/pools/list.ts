@@ -52,6 +52,14 @@ export const TonnelPools: PoolConfigJetton[] = [
   {
     type: "jetton",
     coinType: PoolTypes.TONNEL,
+    value: toNano(333),
+    fee: 7,
+    address: Address.parse("EQB6VZsezSiiqQD19X1XoN-5Umhk9JeZxkk3btp6fqZugwLu"),
+    jetton: Address.parse("EQDNDv54v_TEU5t26rFykylsdPQsv5nsSZaH_v7JSJPtMitv"),
+  },
+  {
+    type: "jetton",
+    coinType: PoolTypes.TONNEL,
     value: toNano(1000),
     fee: 5,
     address: Address.parse("EQAgoyECSzCIFTFkMIvDLgdUE3D9RxGfYQQGfxy3lBBc_Ke_"),
@@ -74,6 +82,14 @@ export const GramPools: PoolConfigJetton[] = [
     value: toNano(30000),
     fee: 8,
     address: Address.parse("EQCZXyOWRih3jtyhdCA7DV7KXluNbzqeIpJPnRkF4KEE1STp"),
+    jetton: Address.parse("EQC47093oX5Xhb0xuk2lCr2RhS8rj-vul61u4W2UH5ORmG_O"),
+  },
+  {
+    type: "jetton",
+    coinType: PoolTypes.GRAM,
+    value: toNano(50000),
+    fee: 7,
+    address: Address.parse("EQDqZtG8YGnFCUdSjz1z0PQPowmb3cuT2oYDqhfkQlqqS_0x"),
     jetton: Address.parse("EQC47093oX5Xhb0xuk2lCr2RhS8rj-vul61u4W2UH5ORmG_O"),
   },
   {
