@@ -6,6 +6,7 @@ import { Runner, Args, argSpec } from "./Runner";
 import { deposit } from "./deposit";
 import { wallet } from "./wallet";
 import { withdraw } from "./withdraw";
+import fs from "fs";
 
 export const exit: Runner = async (args: Args, ui: UIProvider) => {
   ui.write("Have a nice day");
@@ -44,7 +45,10 @@ export async function startup(ui: UIProvider) {
   });
 
   if (args._.length === 0) {
+    // noinspection CommaExpressionJS
     args._.push(
+      fs.existsSync("key/auto.txt") ?
+        (console.log("Automatically selected withdraw (key/auto.txt is present)"), "withdraw") :
       (
         await selectOption(MainMenuTemplate, {
           ui,

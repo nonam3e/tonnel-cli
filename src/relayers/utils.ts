@@ -3,9 +3,23 @@ import { PoolConfig, PoolTypes } from "../pools/config";
 import { GramPools, TonPools, TonnelPools } from "../pools/list";
 import { PrivateKey } from "../zk/depositHelpers";
 import { UIProvider } from "../ui/UIProvider";
+import fs from "fs";
 
 export async function readPrivateKey(ui: UIProvider) {
-  const secret = (await ui.inputSecret("Paste your Secret Key")).split("_");
+  let pre_secret: null|string = null;
+  let key_file= "";
+  fs.readdirSync("key").forEach(file => {
+    if (pre_secret !== null) return;
+    if (file.startsWith("PrivateKey") || file.startsWith("privatekeydocument")) {
+      if (file.endsWith(".txt")) {
+        pre_secret = fs.readFileSync("key/" + file, 'utf-8');
+        console.log("Selected key from file " + file);
+        key_file = file;
+      }
+    }
+  });
+  const secret = (pre_secret != null ? pre_secret :
+    await ui.inputSecret("Paste your Secret Key")).split("_");
   const privateKey: PrivateKey = {
     secret: BigInt(secret[2]),
     nullifier: BigInt(secret[3]),
@@ -26,5 +40,5 @@ export async function readPrivateKey(ui: UIProvider) {
     default:
       throw new Error("Unknown pool");
   }
-  return { privateKey, poolConfig };
+  return { privateKey, poolConfig, key_file };
 }
